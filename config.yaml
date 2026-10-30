@@ -1,0 +1,78 @@
+# Pick YOLO11n on CPU and YOLO11s when CUDA is available.
+model: auto
+conf: 0.25
+nms_iou: 0.5
+tracker: bytetrack.yaml
+track_buffer: 30
+tracker_settings:
+  high_threshold: 0.25
+  low_threshold: 0.1
+  new_track_threshold: 0.25
+  match_threshold: 0.8
+  fuse_score: true
+  gmc_method: sparseOptFlow
+  proximity_threshold: 0.5
+  appearance_threshold: 0.8
+  with_reid: false
+frame_stride: 1
+inference_size: 960
+line:
+  # Door-mat threshold in the lower-right of Recording 2026-10-30 195717.mp4.
+  points: [[0.66, 0.73], [0.96, 0.65]]
+  outside_side: left
+  buffer_zone_width: 0.015
+  debounce_frames: 3
+initial_headcount: 0
+auto_initial_headcount: true
+initial_occupancy_zone: [[0.13, 0.10], [0.93, 0.10], [0.93, 0.96], [0.50, 0.96], [0.50, 0.78], [0.13, 0.62]]
+crowd_zones:
+  - name: General Floor
+    kind: general
+    points: [[0.0, 0.0], [1.0, 0.0], [1.0, 0.70], [0.0, 0.70]]
+    alert_threshold: 20
+  - name: Queue Zone
+    kind: queue
+    points: [[0.05, 0.35], [0.55, 0.35], [0.55, 0.70], [0.05, 0.70]]
+    alert_threshold: 6
+# Staff stations calibrated from the two checkout positions on the left.
+staff_zone: []
+staff_zones:
+  - [[0.00, 0.20], [0.14, 0.20], [0.15, 0.31], [0.13, 0.43], [0.05, 0.47], [0.00, 0.40]]
+  - [[0.00, 0.40], [0.09, 0.39], [0.13, 0.57], [0.10, 0.72], [0.01, 0.71], [0.00, 0.53]]
+staff_rules:
+  long_dwell_multiplier: 2.0
+  staff_zone_fraction: 0.6
+  long_dwell_weight: 0.35
+  staff_zone_weight: 0.65
+  staff_zone_min_seconds: 2.0
+  staff_appearance_threshold: 0.70
+  # Clothing color alone cannot distinguish staff reliably in this CCTV view.
+  uniform_color_weight: 0.0
+  staff_score_threshold: 0.6
+  uniform_color_clusters: 2
+  uniform_color_distance: 0.18
+reid:
+  enabled: false
+  backend: color_histogram
+  similarity_threshold: 0.8
+  gallery_minutes: 10
+upload:
+  max_size_mb: 150
+  max_duration_seconds: 180
+  allowed_types: [.mp4, .mov, .avi, .webm]
+confidence:
+  short_track_frames: 8
+  low_event_threshold: 0.8
+evaluation:
+  tolerance_seconds: 2.0
+  max_ground_truth_mb: 5
+retention_minutes: 60
+max_pending_jobs: 5
+output_codec: mp4v
+output_fps: null
+ffmpeg:
+  enabled: true
+  codec: libx264
+  faststart: true
+group:
+  max_distance_fraction: 0.04

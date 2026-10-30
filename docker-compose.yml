@@ -1,0 +1,11 @@
+services:
+  storecount:
+    build: .
+    ports:
+      - "8000:7860"
+    environment:
+      PORT: 7860
+    volumes:
+      - storecount-jobs:/app/storage/jobs
+volumes:
+  storecount-jobs:
