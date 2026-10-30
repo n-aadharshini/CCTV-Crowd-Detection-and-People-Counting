@@ -1,9 +1,3 @@
----
-title: StoreCount
-sdk: docker
-app_port: 7860
-license: mit
----
 
 # StoreCount
 
